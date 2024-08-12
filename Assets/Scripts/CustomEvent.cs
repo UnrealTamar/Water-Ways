@@ -6,5 +6,9 @@ using UnityEngine.Events;
 public class CustomEvent : MonoBehaviour
 {
     public UnityEvent Trigger;
+
+    public void TriggerTheEvent(){
+        Trigger?.Invoke();
+    }
     
 }

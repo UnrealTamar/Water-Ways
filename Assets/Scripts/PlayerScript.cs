@@ -4,7 +4,18 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using TMPro;
 
+[System.Serializable]
+public class FootStep
+{
+    [Header("Foot Step")]
+    public Transform LeftfootAnchor;
+    public Transform RightfootAnchor;
+    public GameObject footStepMark;
+    public AudioSource footStepAudioSource;
+    public AudioClip footStepAudio;
 
+
+}
 public class PlayerScript : MonoBehaviour
 {
     const string RUN = "Run";
@@ -21,10 +32,7 @@ public class PlayerScript : MonoBehaviour
 
     bool isOnAcidSteam = false;
 
-    [Header("Foot Step")]
-    public Transform LeftfootAnchor;
-    public Transform RightfootAnchor;
-    public GameObject footStepMark;
+    public FootStep footStep;
 
     [Header("Quest Functions")]
     public Quest quest;
@@ -32,8 +40,11 @@ public class PlayerScript : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
+        
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+
     }
 
     void Update()
@@ -108,6 +119,7 @@ public class PlayerScript : MonoBehaviour
     }
 
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Mission"))
@@ -116,7 +128,7 @@ public class PlayerScript : MonoBehaviour
             other.GetComponent<NpcController>().LookAtTarget(transform);
 
         }
-       
+
     }
 
 
@@ -144,11 +156,13 @@ public class PlayerScript : MonoBehaviour
     //Animator Event System
     void RightFootStep()
     {
-        Instantiate(footStepMark, RightfootAnchor.position, RightfootAnchor.rotation);
+        footStep.footStepAudioSource.PlayOneShot(footStep.footStepAudio);
+        Instantiate(footStep.footStepMark, footStep.RightfootAnchor.position, footStep.RightfootAnchor.rotation);
     }
     void LeftFootStep()
     {
-        Instantiate(footStepMark, LeftfootAnchor.position, LeftfootAnchor.rotation);
+        footStep.footStepAudioSource.PlayOneShot(footStep.footStepAudio);
+        Instantiate(footStep.footStepMark, footStep.LeftfootAnchor.position, footStep.LeftfootAnchor.rotation);
     }
 
 

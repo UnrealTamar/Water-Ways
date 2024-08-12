@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -7,28 +5,13 @@ using UnityEngine.UI;
 public class QuestGiver : MonoBehaviour
 {
     public Quest quest;
-    public QuestAssist questAssist;
-
     public PlayerScript player;
     public TextMeshProUGUI descriptionText;
     public Button missionButton;
-
     public bool questCompleted = false;
 
-    public QuestManager questManager;
-
-
-    void Start()
-    {
-
-        questManager = FindObjectOfType<QuestManager>();
-        if (questManager == null)
-        {
-#if UNITY_EDITOR
-            Debug.LogError("QuestManager not found in the scene. Make sure to add it.");
-#endif
-        }
-    }
+    // Reference to the next QuestGiver
+    public QuestGiver nextQuestGiver;
 
     public void ShowQuest()
     {
@@ -45,56 +28,46 @@ public class QuestGiver : MonoBehaviour
         }
     }
 
-
     public void AcceptQuest()
     {
-        if (!questCompleted)
+        if (!questCompleted && !quest.isActive)
         {
-            if (!quest.isActive)
-            {
-                quest.isActive = true;
-                player.quest = quest;
-#if UNITY_EDITOR
-                Debug.Log("Quest accepted: " + quest.description);
-#endif
-
-                questManager.AddQuestDescription(quest.description);
-            }
-        }
-        else
-        {
-#if UNITY_EDITOR
-            Debug.Log("Quest is already active");
-#endif
+            quest.isActive = true;
+            player.quest = quest;
+            Debug.Log("Quest accepted: " + quest.description);
         }
     }
-
 
     public void MarkQuestCompleted()
     {
         questCompleted = true;
+        quest.Complete();
         Debug.Log("Quest marked as completed");
+
+        // Deactivate this quest giver's UI elements
+        if (descriptionText != null)
+            descriptionText.gameObject.SetActive(false);
+        if (missionButton != null)
+            missionButton.gameObject.SetActive(false);
+
+        // Activate the next quest if available
+        if (nextQuestGiver != null)
+        {
+            nextQuestGiver.gameObject.SetActive(true);
+            nextQuestGiver.ShowQuest();
+        }
+        else
+        {
+            Debug.Log("All quests completed!");
+        }
     }
 
     public void AssignMethod()
     {
-        if (questCompleted == false)
+        if (!questCompleted)
         {
             missionButton.onClick.AddListener(ShowQuest);
-
-#if UNITY_EDITOR
-            Debug.Log("Assign Successful");
-#endif
-
+            Debug.Log("Mission button assignment successful");
         }
     }
-
-    public void AssignDescription(string desc)
-    {
-        questAssist.description = desc;
-       questAssist.descriptionText_Optional.text = questAssist.description;
-    }
-
-
-
 }

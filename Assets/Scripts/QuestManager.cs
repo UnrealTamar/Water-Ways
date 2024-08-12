@@ -9,7 +9,7 @@ public class QuestManager : MonoBehaviour
 
     public void AddQuestDescription(string questDescription)
     {
-        allQuestDescriptions.Add(questDescription);
+        // allQuestDescriptions.Add(questDescription);
     }
 
     public void AssignDescription()
@@ -18,10 +18,10 @@ public class QuestManager : MonoBehaviour
         // if (TMPdescriptions.Length == allQuestDescriptions.Count)
         // {
 
-            for (int i = 0; i < TMPdescriptions.Length; i++)
-            {
-                TMPdescriptions[i].text = allQuestDescriptions[i];
-            }
+            // for (int i = 0; i < TMPdescriptions.Length; i++)
+            // {
+            //     TMPdescriptions[i].text = allQuestDescriptions[i];
+            // }
         // }
         // else
         // {

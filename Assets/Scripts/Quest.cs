@@ -21,13 +21,13 @@ public class Quest
     }
 }
 
-[System.Serializable]
-public class QuestAssist
-{
-    [Header("This class is optional")]
-    [HideInInspector] public string description;
-    public TextMeshProUGUI descriptionText_Optional;
+// [System.Serializable]
+// public class QuestAssist
+// {
+//     [Header("This class is optional")]
+//     [HideInInspector] public string description;
+//     public TextMeshProUGUI descriptionText_Optional;
 
 
-}
+// }
 

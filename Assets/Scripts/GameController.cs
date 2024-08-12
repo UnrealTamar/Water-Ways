@@ -10,21 +10,27 @@ public class GameController : MonoBehaviour
     public UnityEvent OnEnableMission;
     public UnityEvent OnDisableMission;
 
+    public Animator objectiveMenu;
+    public string isOpen = "isOpen";
+
 
     public void EnableMissionHandler()
     {
+        objectiveMenu.SetBool(isOpen, true);
         OnEnableMission?.Invoke();
+
         isMission = true;
     }
-     public void DisableMissionHandler()
+    public void DisableMissionHandler()
     {
         OnDisableMission?.Invoke();
+        objectiveMenu.SetBool(isOpen, false);
         isMission = false;
     }
     // Update is called once per frame
     void Update()
     {
-        if(isMission == true)
+        if (isMission == true)
             Time.timeScale = 0f;
         else
             Time.timeScale = 1f;

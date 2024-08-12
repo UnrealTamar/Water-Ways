@@ -9,6 +9,7 @@ public class DialogueManager : MonoBehaviour
 {
     [HideInInspector]
     public Dialogue defaultDialogue;
+    public bool tryDialogue = false;
 
 
     public TextMeshProUGUI nameText;
@@ -16,12 +17,29 @@ public class DialogueManager : MonoBehaviour
     // public Animator animator;
     public GameObject dialogueBox;
     public GameObject player;
-    private Queue<string> sentences;
+    private Queue<(string sentence, float typingSpeed)> sentences; // Changed queue type
 
     void Start()
     {
-        sentences = new Queue<string>();
+        sentences = new Queue<(string sentence, float typingSpeed)>(); // Initialize queue with tuples
         Initialize(defaultDialogue);
+    }
+
+    private void Update()
+    {
+        if (tryDialogue == true)
+        {
+            player.transform.Translate(Vector3.zero);
+            player.GetComponent<NavMeshAgent>().enabled = false;
+            player.GetComponent<PlayerScript>().enabled = false;
+            player.GetComponent<Animator>().SetBool("Idle", true);
+            player.GetComponent<Animator>().SetBool("Run", false);
+        }
+        else
+        {
+            player.GetComponent<NavMeshAgent>().enabled = true;
+            player.GetComponent<PlayerScript>().enabled = true;
+        }
     }
 
     private void Initialize(Dialogue dialogue)
@@ -40,6 +58,8 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueBox.SetActive(true);
         // animator.SetBool("isOpen", true);
+
+        tryDialogue = true;
         player.transform.Translate(Vector3.zero);
         player.GetComponent<NavMeshAgent>().enabled = false;
         player.GetComponent<PlayerScript>().enabled = false;
@@ -48,9 +68,11 @@ public class DialogueManager : MonoBehaviour
 
         nameText.text = dialogue.name;
         sentences.Clear();
-        foreach (string sentence in dialogue.sentences)
+
+        // Enqueue sentences with their corresponding typing speeds (assuming typingSpeeds exists in Dialogue)
+        for (int i = 0; i < dialogue.sentences.Length; i++)
         {
-            sentences.Enqueue(sentence);
+            sentences.Enqueue((dialogue.sentences[i], dialogue.typingSpeeds?[i] ?? 0.05f)); // Use default if typingSpeeds is null
         }
 
         DisplayNextSentence();
@@ -67,18 +89,22 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        string sentence = sentences.Dequeue();
+        // Dequeue the tuple containing sentence and typing speed
+        var sentenceTuple = sentences.Dequeue();
+        string sentence = sentenceTuple.sentence;
+        float typingSpeed = sentenceTuple.typingSpeed;
+
         StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
+        StartCoroutine(TypeSentence(sentence, typingSpeed));
     }
 
-    IEnumerator TypeSentence(string sentence)
+    IEnumerator TypeSentence(string sentence, float typingSpeed)
     {
         dialogueText.text = "";
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
-            yield return null;
+            yield return new WaitForSeconds(typingSpeed);
         }
     }
 
@@ -91,8 +117,9 @@ public class DialogueManager : MonoBehaviour
         // animator.enabled = false;
         dialogueBox.SetActive(false);
         // animator.SetBool("isOpen", !true);
-        player.GetComponent<PlayerScript>().enabled = true;
-        player.GetComponent<NavMeshAgent>().enabled = true;
+        //player.GetComponent<PlayerScript>().enabled = true;
+        //player.GetComponent<NavMeshAgent>().enabled = true;
+        tryDialogue = false;
 
         // Invoke the stored UnityEvent when conversation ends
         onConversationEnd?.Invoke();

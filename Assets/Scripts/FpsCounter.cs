@@ -18,19 +18,19 @@ public class FpsCounter : MonoBehaviour
         deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
     }
 
-    private void OnGUI()
-    {
-        int fps = Mathf.RoundToInt(1.0f / deltaTime);
-        string text = $"FPS: {fps}";
+    // private void OnGUI()
+    // {
+    //     int fps = Mathf.RoundToInt(1.0f / deltaTime);
+    //     string text = $"FPS: {fps}";
 
-        GUIStyle style = new GUIStyle();
-        Rect rect = new Rect(10, 50, 150, 30);
+    //     GUIStyle style = new GUIStyle();
+    //     Rect rect = new Rect(10, 50, 150, 30);
 
-        style.fontSize = 20;
-        style.normal.textColor = Color.red;
+    //     style.fontSize = 20;
+    //     style.normal.textColor = Color.red;
 
-        GUI.Label(rect, text, style);
-    }
+    //     GUI.Label(rect, text, style);
+    // }
 
 
 

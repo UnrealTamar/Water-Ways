@@ -22360,6 +22360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialToChange: {fileID: 2100000, guid: 76425a230ae8c4c4dabd48a479d867a7, type: 2}
   colorToApply: {r: 0.13995194, g: 0.45853606, b: 0.8018868, a: 1}
+  defaultColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &1191907096 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2949110233318886774, guid: def282dad50a44c5c94dbccc8de2b711,
@@ -53867,7 +53868,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4512371190812377367}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.32
   m_Speed: 3.5
